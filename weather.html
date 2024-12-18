@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Details</title>
+    <link rel="stylesheet" href="second.css">
+    <style>
+        body {
+            background-color: black;
+            
+           
+        }
+        .info{
+            color: red;
+        }
+         
+       .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            margin: 40px auto;
+        }
+       .search {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+           
+
+        }
+       .search input {
+            padding: 10px;
+            width: 70%;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+       .search button {
+
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+       .search button:hover {
+            background-color: #3e8e41;
+        }
+       .weather {
+            display: none;
+        }
+       .weather-icon {
+            width: 50px;
+            height: 50px;
+            margin: 20px auto;
+        }
+       .temp {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+       .city {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+       .details {
+            display: flex;
+            justify-content: space-between;
+        }
+       .col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+       .col img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+        .search{
+            height: 40px;
+            border-radius: 50%;
+        
+        }
+    </style>
+</head>
+<body>
+    <div class="info"> 
+    <align><center><h1> KING TIGER WEATHER INFORMATION</h1>
+         
+    <img src="cold.png" height="100px" width="100px">
+    <img src="humiodity.png" height="100px" width="100px">
+    <img src="wind.jpeg" height="100px" width="100px">
+ 
+</center>
+    </align> 
+    </div>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="Enter city name">
+            <button><img src="Search.png" alt="search" class="search"></button>
+        </div>
+        <div class="weather">
+            <br><img src="cold.png" class="weather-icon" alt="weather-icon">
+            <h1 class="temp">12°C</h1>
+            <h2 class="city">Ludhiana</h2>
+            <div class="details">
+                <div class="col">
+                    <img src="humiodity.png" alt="humidity">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="wind.jpeg" alt="wind">
+                    <div>
+                        <p class="wind">15 km/h</p>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    const apikey = "9b14e6b8833fcef71eabba5accd005f7";
+const apiurl = "http://api.openweathermap.org/data/2.5/weather?q=";
+
+const searchBox = document.querySelector(".search input");
+const searchBtn = document.querySelector(".search button");
+const weathericon = document.querySelector(".weather-icon");
+
+async function checkWeather(city) {
+    try {
+        const response = await fetch(`${apiurl}${city}&appid=${apikey}`);
+        const data = await response.json();
+
+        if (data.cod === "404") {
+            alert("City not found");
+            return;
+        }
+
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML = `${Math.round(data.main.temp - 273.15)}°C`;
+        document.querySelector(".humidity").innerHTML = `${data.main.humidity}%`;
+        document.querySelector(".wind").innerHTML = `${data.wind.speed} km/h`;
+        document.querySelector(".weather").style.display = "block";
+    } catch (error) {
+        console.error("Error fetching weather data:", error);
+    }
+}
+
+searchBtn.addEventListener("click", () => {
+    checkWeather(searchBox.value);
+});
+</script>
